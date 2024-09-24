@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Buffers;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
+
+using SharpAssassin.Commands;
 
 namespace SharpAssassin;
 
@@ -63,8 +64,9 @@ public sealed class SpamAssassinResult : ISpamAssassinResult
     private readonly long _bodyPosition;
     private volatile bool _disposed;
 
-    public SpamAssassinResult(MemoryStream response, long bodyPosition, SpamAssassinStatus status, IReadOnlyDictionary<string, string> headers)
+    public SpamAssassinResult(CommandBase command, MemoryStream response, long bodyPosition, SpamAssassinStatus status, IReadOnlyDictionary<string, string> headers)
     {
+        Command = command;
         Response = response;
         Status = status;
         Headers = headers;
@@ -90,11 +92,11 @@ public sealed class SpamAssassinResult : ISpamAssassinResult
 
     #region Static Methods
 
-    internal static async Task<SpamAssassinResult> ParseAsync(SpamAssassinClient client, string command, MemoryStream response, CancellationToken cancellationToken)
+    internal static async Task<SpamAssassinResult> ParseAsync(SpamAssassinClient client, CommandBase command, MemoryStream response, CancellationToken cancellationToken)
     {
         var inHeader = true;
         var lineBreak = new List<byte>(4);
-        var headerBytes = new List<byte>(4096);
+        var headerBytes = new List<byte>(1024);
         var bodyPosition = -1L;
 
         while (response.Position < response.Length)
@@ -140,7 +142,7 @@ public sealed class SpamAssassinResult : ISpamAssassinResult
         var headers = await ParseHeadersAsync(headerBytes.ToArray(), cancellationToken);
         var status = SpamAssassinStatus.OK;
 
-        if (command.Equals("PING", StringComparison.OrdinalIgnoreCase))
+        if (command.Name.Equals("PING", StringComparison.OrdinalIgnoreCase))
         {
             if (!SAStatusStringHeader.Equals("PONG", StringComparison.OrdinalIgnoreCase))
             {
@@ -165,7 +167,7 @@ public sealed class SpamAssassinResult : ISpamAssassinResult
         headers.Remove(SAStatusStringHeader);
 
         // Return new response
-        return new SpamAssassinResult(response, bodyPosition, status, headers);
+        return new SpamAssassinResult(command, response, bodyPosition, status, headers);
     }
 
     private static async Task<Dictionary<string, string>> ParseHeadersAsync(byte[] headers, CancellationToken cancellationToken)
@@ -318,6 +320,8 @@ public sealed class SpamAssassinResult : ISpamAssassinResult
     #endregion
 
     #region Properties
+
+    public CommandBase Command { get; }
 
     public SpamAssassinStatus Status { get; }
 

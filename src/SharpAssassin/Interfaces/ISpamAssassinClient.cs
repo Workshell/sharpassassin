@@ -6,30 +6,24 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace SharpAssassin.Interfaces;
+using SharpAssassin.Commands;
+
+namespace SharpAssassin;
 
 public interface ISpamAssassinClient
 {
     #region Methods
 
     Task<ISpamAssassinResult> CheckAsync(Stream body, CancellationToken cancellationToken = default);
-    Task<ISpamAssassinResult> CheckAsync(Stream body, IReadOnlyDictionary<string, string> headers, CancellationToken cancellationToken = default);
     Task<ISpamAssassinResult> HeadersAsync(Stream body, CancellationToken cancellationToken = default);
-    Task<ISpamAssassinResult> HeadersAsync(Stream body, IReadOnlyDictionary<string, string> headers, CancellationToken cancellationToken = default);
-    Task<SpamAssassinResult> PingAsync(Stream body, CancellationToken cancellationToken = default);
-    Task<SpamAssassinResult> PingAsync(Stream body, IReadOnlyDictionary<string, string> headers, CancellationToken cancellationToken = default);
-    Task<SpamAssassinResult> ProcessAsync(Stream body, CancellationToken cancellationToken = default);
-    Task<SpamAssassinResult> ProcessAsync(Stream body, IReadOnlyDictionary<string, string> headers, CancellationToken cancellationToken = default);
-    Task<SpamAssassinResult> ReportAsync(Stream body, CancellationToken cancellationToken = default);
-    Task<SpamAssassinResult> ReportAsync(Stream body, IReadOnlyDictionary<string, string> headers, CancellationToken cancellationToken = default);
-    Task<SpamAssassinResult> ReportIfSpamAsync(Stream body, CancellationToken cancellationToken = default);
-    Task<SpamAssassinResult> ReportIfSpamAsync(Stream body, IReadOnlyDictionary<string, string> headers, CancellationToken cancellationToken = default);
-    Task<SpamAssassinResult> SkipAsync(Stream body, CancellationToken cancellationToken = default);
-    Task<SpamAssassinResult> SkipAsync(Stream body, IReadOnlyDictionary<string, string> headers, CancellationToken cancellationToken = default);
-    Task<SpamAssassinResult> SymbolsAsync(Stream body, CancellationToken cancellationToken = default);
-    Task<SpamAssassinResult> SymbolsAsync(Stream body, IReadOnlyDictionary<string, string> headers, CancellationToken cancellationToken = default);
-    Task<SpamAssassinResult> TellAsync(Stream body, CancellationToken cancellationToken = default);
-    Task<SpamAssassinResult> TellAsync(Stream body, IReadOnlyDictionary<string, string> headers, CancellationToken cancellationToken = default);
+    Task<ISpamAssassinResult> PingAsync(Stream body, CancellationToken cancellationToken = default);
+    Task<ISpamAssassinResult> ProcessAsync(Stream body, CancellationToken cancellationToken = default);
+    Task<ISpamAssassinResult> ReportAsync(Stream body, CancellationToken cancellationToken = default);
+    Task<ISpamAssassinResult> ReportIfSpamAsync(Stream body, CancellationToken cancellationToken = default);
+    Task<ISpamAssassinResult> SkipAsync(Stream body, CancellationToken cancellationToken = default);
+    Task<ISpamAssassinResult> SymbolsAsync(Stream body, CancellationToken cancellationToken = default);
+    Task<ISpamAssassinResult> TellAsync(Stream body, CancellationToken cancellationToken = default);
+    Task<ISpamAssassinResult> SendAsync(CommandBase command, CancellationToken cancellationToken = default);
 
     #endregion
 
@@ -39,7 +33,7 @@ public interface ISpamAssassinClient
     int Port { get; set; }
     string? User { get; set; }
     TimeSpan Timeout { get; set; }
-    public string Version { get; set; }
+    string Version { get; set; }
 
     #endregion
 

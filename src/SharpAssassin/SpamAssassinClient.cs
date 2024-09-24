@@ -9,6 +9,7 @@ using System.Reflection.PortableExecutable;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using SharpAssassin.Commands;
 
 namespace SharpAssassin;
 
@@ -30,111 +31,68 @@ public sealed class SpamAssassinClient
 
     public async Task<ISpamAssassinResult> CheckAsync(Stream body, CancellationToken cancellationToken)
     {
-        return await CheckAsync(body, EmptyDict, cancellationToken);
-    }
-
-    public async Task<ISpamAssassinResult> CheckAsync(Stream body, IReadOnlyDictionary<string, string> headers, CancellationToken cancellationToken)
-    {
-        var result = await SendAsync("CHECK", headers, body, cancellationToken);
+        var result = await SendAsync(new CheckCommand(body), cancellationToken);
 
         return result;
     }
 
     public async Task<ISpamAssassinResult> HeadersAsync(Stream body, CancellationToken cancellationToken)
     {
-        return await HeadersAsync(body, EmptyDict, cancellationToken);
-    }
-
-    public async Task<ISpamAssassinResult> HeadersAsync(Stream body, IReadOnlyDictionary<string, string> headers, CancellationToken cancellationToken)
-    {
-        var result = await SendAsync("HEADERS", headers, body, cancellationToken);
+        var result = await SendAsync(new HeadersCommand(body), cancellationToken);
 
         return result;
     }
 
-    public async Task<SpamAssassinResult> PingAsync(Stream body, CancellationToken cancellationToken)
+    public async Task<ISpamAssassinResult> PingAsync(CancellationToken cancellationToken)
     {
-        return await PingAsync(body, EmptyDict, cancellationToken);
-    }
-
-    public async Task<SpamAssassinResult> PingAsync(Stream body, IReadOnlyDictionary<string, string> headers, CancellationToken cancellationToken)
-    {
-        var result = await SendAsync("PING", headers, body, cancellationToken);
+        var result = await SendAsync(new PingCommand(), cancellationToken);
 
         return result;
     }
 
-    public async Task<SpamAssassinResult> ProcessAsync(Stream body, CancellationToken cancellationToken)
+    public async Task<ISpamAssassinResult> ProcessAsync(Stream body, CancellationToken cancellationToken)
     {
-        return await ProcessAsync(body, EmptyDict, cancellationToken);
-    }
-
-    public async Task<SpamAssassinResult> ProcessAsync(Stream body, IReadOnlyDictionary<string, string> headers, CancellationToken cancellationToken)
-    {
-        var result = await SendAsync("PROCESS", headers ?? EmptyDict, body, cancellationToken);
+        var result = await SendAsync(new ProcessCommand(body), cancellationToken);
 
         return result;
     }
 
-    public async Task<SpamAssassinResult> ReportAsync(Stream body, CancellationToken cancellationToken)
+    public async Task<ISpamAssassinResult> ReportAsync(Stream body, CancellationToken cancellationToken)
     {
-        return await ReportAsync(body, EmptyDict, cancellationToken);
-    }
-
-    public async Task<SpamAssassinResult> ReportAsync(Stream body, IReadOnlyDictionary<string, string> headers, CancellationToken cancellationToken)
-    {
-        var result = await SendAsync("REPORT", headers ?? EmptyDict, body, cancellationToken);
+        var result = await SendAsync(new ReportCommand(body), cancellationToken);
 
         return result;
     }
 
-    public async Task<SpamAssassinResult> ReportIfSpamAsync(Stream body, CancellationToken cancellationToken)
+    public async Task<ISpamAssassinResult> ReportIfSpamAsync(Stream body, CancellationToken cancellationToken)
     {
-        return await ReportIfSpamAsync(body, EmptyDict, cancellationToken);
-    }
-
-    public async Task<SpamAssassinResult> ReportIfSpamAsync(Stream body, IReadOnlyDictionary<string, string> headers, CancellationToken cancellationToken)
-    {
-        var result = await SendAsync("REPORT_IFSPAM", headers ?? EmptyDict, body, cancellationToken);
+        var result = await SendAsync(new ReportIfSpamCommand(body), cancellationToken);
 
         return result;
     }
 
-    public async Task<SpamAssassinResult> SkipAsync(Stream body, CancellationToken cancellationToken)
+    public async Task<ISpamAssassinResult> SkipAsync(CancellationToken cancellationToken)
     {
-        return await SkipAsync(body, EmptyDict, cancellationToken);
-    }
-
-    public async Task<SpamAssassinResult> SkipAsync(Stream body, IReadOnlyDictionary<string, string> headers, CancellationToken cancellationToken)
-    {
-        var result = await SendAsync("SKIP", headers ?? EmptyDict, body, cancellationToken);
+        var result = await SendAsync(new SkipCommand(), cancellationToken);
 
         return result;
     }
 
-    public async Task<SpamAssassinResult> SymbolsAsync(Stream body, CancellationToken cancellationToken)
+    public async Task<ISpamAssassinResult> SymbolsAsync(Stream body, CancellationToken cancellationToken)
     {
-        return await SymbolsAsync(body, EmptyDict, cancellationToken);
-    }
-
-    public async Task<SpamAssassinResult> SymbolsAsync(Stream body, IReadOnlyDictionary<string, string> headers, CancellationToken cancellationToken)
-    {
-        var result = await SendAsync("SYMBOLS", headers ?? EmptyDict, body, cancellationToken);
+        var result = await SendAsync(new SymbolsCommand(body), cancellationToken);
 
         return result;
     }
 
-    public async Task<SpamAssassinResult> TellAsync(Stream body, CancellationToken cancellationToken)
+    public async Task<ISpamAssassinResult> TellAsync(Stream body, CancellationToken cancellationToken)
     {
-        return await TellAsync(body, EmptyDict, cancellationToken);
+        var result = await SendAsync(new TellCommand(body), cancellationToken);
+
+        return result;
     }
 
-    public Task<SpamAssassinResult> TellAsync(Stream body, IReadOnlyDictionary<string, string> headers, CancellationToken cancellationToken)
-    {
-        throw new NotImplementedException();
-    }
-
-    internal async Task<SpamAssassinResult> SendAsync(string command, IReadOnlyDictionary<string, string> headers, Stream body, CancellationToken cancellationToken)
+    public async Task<ISpamAssassinResult> SendAsync(CommandBase command, CancellationToken cancellationToken)
     {
         using var cts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
 
@@ -147,16 +105,19 @@ public sealed class SpamAssassinClient
         // Send request
         var headersBuffer = new StringBuilder();
 
-        headersBuffer.AppendLine($"{command.ToUpper()} SPAMC/{Version}");
+        headersBuffer.AppendLine($"{command.Name.ToUpper()} SPAMC/{Version}");
 
-        if (!string.IsNullOrWhiteSpace(User))
+        if (command.SupportsHeaders)
         {
-            headersBuffer.AppendLine($"User: {User}");
-        }
+            if (!string.IsNullOrWhiteSpace(User))
+            {
+                headersBuffer.AppendLine($"User: {User}");
+            }
 
-        foreach (var header in headers)
-        {
-            headersBuffer.AppendLine($"{header.Key}: {header.Value}");
+            foreach (var header in command.Headers)
+            {
+                headersBuffer.AppendLine($"{header.Key}: {header.Value}");
+            }
         }
 
         headersBuffer.AppendLine();
@@ -165,22 +126,25 @@ public sealed class SpamAssassinClient
 
         await socket.SendAsync(new ArraySegment<byte>(buffer, 0, buffer.Length), SocketFlags.None, cancellationToken);
 
-        var outBuffer = ArrayPool<byte>.Shared.Rent(4096);
-
-        try
+        if (command.SupportsBody)
         {
-            var numRead = await body.ReadAsync(outBuffer, 0, outBuffer.Length, cancellationToken);
+            var outBuffer = ArrayPool<byte>.Shared.Rent(4096);
 
-            while (numRead > 0)
+            try
             {
-                await socket.SendAsync(new ArraySegment<byte>(outBuffer, 0, numRead), SocketFlags.None, cancellationToken);
+                var numRead = await command.Body.ReadAsync(outBuffer, 0, outBuffer.Length, cancellationToken);
 
-                numRead = await body.ReadAsync(outBuffer, 0, outBuffer.Length, cancellationToken);
+                while (numRead > 0)
+                {
+                    await socket.SendAsync(new ArraySegment<byte>(outBuffer, 0, numRead), SocketFlags.None, cancellationToken);
+
+                    numRead = await command.Body.ReadAsync(outBuffer, 0, outBuffer.Length, cancellationToken);
+                }
             }
-        }
-        finally
-        {
-            ArrayPool<byte>.Shared.Return(outBuffer);
+            finally
+            {
+                ArrayPool<byte>.Shared.Return(outBuffer);
+            }
         }
 
         socket.Shutdown(SocketShutdown.Send);
@@ -221,6 +185,7 @@ public sealed class SpamAssassinClient
 
         return response;
     }
+
 
     internal MemoryStream CreateMemoryStream()
     {

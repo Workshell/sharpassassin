@@ -7,6 +7,8 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
+using SharpAssassin.Commands;
+
 namespace SharpAssassin;
 
 public interface ISpamAssassinResult : IDisposable, IAsyncDisposable
@@ -20,6 +22,7 @@ public interface ISpamAssassinResult : IDisposable, IAsyncDisposable
 
     #region Properties
 
+    CommandBase Command { get; }
     bool IsSpam { get; }
     double Threshold { get; }
     double Score { get; }
