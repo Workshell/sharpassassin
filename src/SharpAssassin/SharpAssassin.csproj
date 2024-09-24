@@ -5,13 +5,15 @@
 	<Nullable>enable</Nullable>
 	<ImplicitUsings>disable</ImplicitUsings>
 	<RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
-	<GeneratePackageOnBuild>false</GeneratePackageOnBuild>
 	<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 	<SignAssembly>false</SignAssembly>
 	<AssemblyOriginatorKeyFile>Workshell.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
 
 	<PropertyGroup>
+		<GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+		<IncludeSymbols>true</IncludeSymbols>
+		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
 		<PackageId>SharpAssassin</PackageId>
 		<PackageDescription>A class library for interacting with SpamAssassin and performing commands against it.</PackageDescription>
 		<PackageProjectUrl>https://github.com/Workshell/sharpassassin</PackageProjectUrl>
