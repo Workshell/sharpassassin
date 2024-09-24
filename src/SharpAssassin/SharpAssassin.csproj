@@ -20,7 +20,7 @@
 		<PackageLicenseFile>license.txt</PackageLicenseFile>
 		<Copyright>Workshell Ltd</Copyright>
 		<Authors>Workshell Ltd</Authors>
-		<RepositoryUrl>https://github.com/Workshell/spamassassin</RepositoryUrl>
+		<RepositoryUrl>https://github.com/Workshell/sharpassassin</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
 		<Version>0.0.0.1</Version>
 	</PropertyGroup>
