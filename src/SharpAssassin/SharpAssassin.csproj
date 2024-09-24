@@ -5,6 +5,26 @@
 	<Nullable>enable</Nullable>
 	<ImplicitUsings>disable</ImplicitUsings>
 	<RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
+	<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+	<SignAssembly>false</SignAssembly>
+	<AssemblyOriginatorKeyFile>Workshell.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
+
+	<PropertyGroup>
+		<PackageId>SharpAssassin</PackageId>
+		<PackageDescription>An class library for integrating with SpamAssassin.</PackageDescription>
+		<PackageProjectUrl>https://github.com/Workshell/sharpassassin</PackageProjectUrl>
+		<PackageIconUrl>http://img.workshell.co.uk/github/sharpassassin/logo.png</PackageIconUrl>
+		<PackageTags>workshell spam spamassassin</PackageTags>
+		<PackageLicenseFile>license.txt</PackageLicenseFile>
+		<Copyright>Workshell Ltd</Copyright>
+		<Authors>Workshell Ltd</Authors>
+		<RepositoryUrl>https://github.com/Workshell/spamassassin</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
+		<Version>0.0.0.1</Version>
+	</PropertyGroup>
+	<ItemGroup>
+		<None Include="..\..\license.txt" Pack="true" PackagePath="$(PackageLicenseFile)" />
+	</ItemGroup>
 
 </Project>
