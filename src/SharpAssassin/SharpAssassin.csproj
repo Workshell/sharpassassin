@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net8.0;net7.0;net6.0</TargetFrameworks>
+    <TargetFrameworks>net8.0;net7.0;net6.0;</TargetFrameworks>
 	<Nullable>enable</Nullable>
 	<ImplicitUsings>disable</ImplicitUsings>
 	<RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
@@ -12,10 +12,10 @@
 
 	<PropertyGroup>
 		<PackageId>SharpAssassin</PackageId>
-		<PackageDescription>An class library for integrating with SpamAssassin.</PackageDescription>
+		<PackageDescription>A class library for interacting with SpamAssassin and performing commands against it.</PackageDescription>
 		<PackageProjectUrl>https://github.com/Workshell/sharpassassin</PackageProjectUrl>
 		<PackageIconUrl>http://img.workshell.co.uk/github/sharpassassin/logo.png</PackageIconUrl>
-		<PackageTags>workshell spam spamassassin</PackageTags>
+		<PackageTags>workshell spam assassom spamassassin</PackageTags>
 		<PackageLicenseFile>license.txt</PackageLicenseFile>
 		<Copyright>Workshell Ltd</Copyright>
 		<Authors>Workshell Ltd</Authors>
