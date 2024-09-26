@@ -15,7 +15,7 @@ namespace SharpAssassin;
 
 public delegate void GetMemoryStreamEventHandler(object sender, MemoryStreamEventArgs e);
 
-public sealed class SpamAssassinClient
+public sealed class SpamAssassinClient : ISpamAssassinClient
 {
     private static readonly IReadOnlyDictionary<string, string> EmptyDict = new Dictionary<string, string>(0);
 

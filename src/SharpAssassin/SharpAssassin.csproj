@@ -19,7 +19,8 @@
 		<PackageProjectUrl>https://github.com/Workshell/sharpassassin</PackageProjectUrl>
 		<PackageTags>workshell spam assassom spamassassin</PackageTags>
 		<PackageLicenseFile>license.txt</PackageLicenseFile>
-		<IconUrl>http://img.workshell.co.uk/github/sharpassassin/logo.png</IconUrl>
+		<PackageIconUrl>https://img.workshell.co.uk/github/sharpassassin/logo.png</PackageIconUrl>
+		<IconUrl>https://img.workshell.co.uk/github/sharpassassin/logo.png</IconUrl>
 		<Copyright>Workshell Ltd</Copyright>
 		<Authors>Workshell Ltd</Authors>
 		<RepositoryUrl>https://github.com/Workshell/sharpassassin</RepositoryUrl>
