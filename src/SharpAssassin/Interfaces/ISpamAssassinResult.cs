@@ -23,6 +23,8 @@ public interface ISpamAssassinResult : IDisposable, IAsyncDisposable
     #region Properties
 
     CommandBase Command { get; }
+    SpamAssassinStatus Status { get; }
+    string StatusDescription { get; }
     bool IsSpam { get; }
     double Threshold { get; }
     double Score { get; }
