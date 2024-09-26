@@ -17,7 +17,7 @@
 		<PackageId>SharpAssassin</PackageId>
 		<PackageDescription>A class library for interacting with SpamAssassin and performing commands against it.</PackageDescription>
 		<PackageProjectUrl>https://github.com/Workshell/sharpassassin</PackageProjectUrl>
-		<PackageTags>workshell spam assassom spamassassin</PackageTags>
+		<PackageTags>workshell spam assassin spamassassin</PackageTags>
 		<PackageLicenseFile>license.txt</PackageLicenseFile>
 		<PackageIconUrl>https://img.workshell.co.uk/github/sharpassassin/logo.png</PackageIconUrl>
 		<IconUrl>https://img.workshell.co.uk/github/sharpassassin/logo.png</IconUrl>
